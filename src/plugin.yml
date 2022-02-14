@@ -1,0 +1,5 @@
+name: PLUGIN_NAME
+version: 1.0
+author: INSERT_NAME
+main: com.INSERT_NAME.PLUGIN_NAME.PLUGIN_NAME
+api-version: 1.18
