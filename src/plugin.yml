@@ -1,5 +1,5 @@
-name: PLUGIN_NAME
+name: Pathfinding
 version: 1.0
-author: INSERT_NAME
-main: com.INSERT_NAME.PLUGIN_NAME.PLUGIN_NAME
+author: Mvye
+main: com.mvye.pathfinding.Pathfinding
 api-version: 1.18
