@@ -1,5 +1,6 @@
 package com.mvye.pathfinding.events;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -51,7 +52,12 @@ public class Pathfinder implements Listener {
                     path.clear();
                     world = player.getWorld();
                     createShortestPath(player.getLocation(), block.getLocation());
-                    addCarpetToPath();
+                    if (path.size() == 0) {
+                        player.sendMessage(ChatColor.RED + "Could not create path");
+                    }
+                    else {
+                        addCarpetToPath();
+                    }
                 }
             }
         }
@@ -81,8 +87,11 @@ public class Pathfinder implements Listener {
             if (open.isEmpty()) { break; }
             current = open.remove(0);
             closed.add(current);
-            if (current.getX() == endX && current.getZ() == endZ) { break;}
+            if (current.getX() == endX && current.getY() == endY && current.getZ() == endZ) { break;}
             getNeighbors();
+        }
+        if (current.getX() != endX || current.getY() != endY || current.getZ() != endZ) {
+            return;
         }
         path.add(0, current);
         while (current.getParent() != null) {
@@ -99,15 +108,15 @@ public class Pathfinder implements Listener {
                 node = new Node(current.getX()+x, current.getZ()+z);
                 Location nodeLocation = new Location(world, node.getX(), current.getY(), node.getZ());
                 Location nodeBlockLocation;
-                Block b = world.getBlockAt(nodeLocation);
-                if (b.getType() == Material.WHITE_WOOL) {
+                Block b = world.getBlockAt(nodeLocation.clone().add(0,1,0));
+                if (b.getType() != Material.AIR) {
                     nodeBlockLocation = b.getLocation();
                 }
                 else {
-                    if (nodeLocation.clone().add(0,1,0).getBlock().getType() == Material.WHITE_WOOL) {
-                        nodeBlockLocation = nodeLocation.clone().add(0,1,0);
+                    if (nodeLocation.getBlock().getType() != Material.AIR) {
+                        nodeBlockLocation = nodeLocation;
                     }
-                    else if (nodeLocation.clone().subtract(0,1,0).getBlock().getType() == Material.WHITE_WOOL) {
+                    else if (nodeLocation.clone().subtract(0,1,0).getBlock().getType() != Material.AIR) {
                         nodeBlockLocation = nodeLocation.clone().subtract(0,1,0);
                     }
                     else {
